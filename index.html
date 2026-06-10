@@ -1,59 +1,571 @@
-<!DOCTYPE html><html lang="ur">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Building Material</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Shahid Khattak & Brothers | Building Material Supplier Rawalpindi</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f4f4f4; }
-    header { background: #333; color: white; padding: 20px; text-align: center; }
-    nav { background: #444; padding: 10px; text-align: center; }
-    nav a { color: white; margin: 0 12px; text-decoration: none; }
-    .hero { padding: 40px 20px; text-align: center; background: white; }
-    .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; padding: 20px; }
-    .card { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .card img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; }
-    footer { background: #333; color: white; text-align: center; padding: 12px; margin-top: 20px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fefcf5;
+      color: #1e2a2f;
+      scroll-behavior: smooth;
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    /* editable mode toggle */
+    .edit-control {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      background: #1f3b2c;
+      color: white;
+      border: none;
+      border-radius: 60px;
+      padding: 12px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+    .edit-control:hover {
+      background: #b97f10;
+    }
+    .price-editable {
+      cursor: pointer;
+      transition: background 0.1s;
+      border-radius: 12px;
+      padding: 4px 8px;
+      margin: -4px -8px;
+      display: inline-block;
+    }
+    .price-editable[contenteditable="true"] {
+      background-color: #fff2df;
+      outline: 2px solid #c27f0e;
+      border-radius: 12px;
+    }
+    .edit-mode-badge {
+      background: #c27f0e;
+      color: white;
+      font-size: 12px;
+      border-radius: 30px;
+      padding: 4px 10px;
+      margin-left: 12px;
+    }
+    /* top bar */
+    .top-bar {
+      background-color: #1f3b2c;
+      color: white;
+      padding: 8px 0;
+      font-size: 14px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .top-bar span i { margin-right: 6px; }
+    .top-bar a { color: #ffdd99; text-decoration: none; font-weight: 500; }
+    .main-header {
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(2px);
+      background-color: #ffffffea;
+    }
+    .header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .logo h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #1f3b2c, #b97f10);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .logo p { font-size: 0.7rem; color: #7a6e4e; }
+    .nav-links { display: flex; flex-wrap: wrap; gap: 24px; }
+    .nav-links a { text-decoration: none; font-weight: 600; color: #2c3e2b; transition: 0.2s; }
+    .nav-links a:hover { color: #c27f0e; }
+    .header-phone { background: #f5e7d3; padding: 8px 18px; border-radius: 40px; font-weight: 700; }
+    .hero {
+      background: linear-gradient(115deg, #fff8ed, #fdf1e0);
+      padding: 60px 0 50px;
+      text-align: center;
+      border-bottom: 1px solid #ece3d4;
+    }
+    .hero-badge {
+      background: #d4c4a8;
+      display: inline-block;
+      padding: 6px 20px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .hero h2 { font-size: 2.8rem; font-weight: 800; color: #1f3b2c; max-width: 800px; margin: 0 auto 16px; }
+    .hero p { font-size: 1.2rem; color: #5a4e3a; max-width: 700px; margin: 0 auto 32px; }
+    .features-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; margin-top: 20px; }
+    .feature-card {
+      background: white; padding: 16px 24px; border-radius: 48px;
+      display: flex; align-items: center; gap: 14px; font-weight: 600;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.03);
+    }
+    .feature-card i { font-size: 1.8rem; color: #c78014; }
+    .info-strip { background: white; padding: 32px 0; border-bottom: 1px solid #ece3d4; }
+    .info-cards { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; }
+    .info-item {
+      flex: 1; background: #fefaf2; border-radius: 28px; padding: 20px 16px;
+      text-align: center; border: 1px solid #efe3cf;
+    }
+    .info-item i { font-size: 2.2rem; color: #c27f0e; margin-bottom: 12px; }
+    .section-title { text-align: center; font-size: 2rem; font-weight: 800; margin: 48px 0 16px; color: #1f3b2c; }
+    .section-sub { text-align: center; color: #7f6e4c; margin-bottom: 40px; }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 48px;
+    }
+    .product-card {
+      background: white; border-radius: 28px; overflow: hidden;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.05);
+      border: 1px solid #f0e3d2;
+      transition: 0.25s;
+    }
+    .product-card:hover { transform: translateY(-5px); }
+    .product-img { height: 180px; background: #e9e0cf; overflow: hidden; }
+    .product-img img { width: 100%; height: 100%; object-fit: cover; }
+    .product-info { padding: 22px 18px 24px; }
+    .product-title { font-size: 1.5rem; font-weight: 700; }
+    .product-unit { font-size: 0.85rem; color: #c27f0e; font-weight: 600; margin: 6px 0 8px; }
+    .product-price { font-size: 1.8rem; font-weight: 800; color: #1f3b2c; margin: 12px 0 4px; }
+    .price-note { font-size: 0.8rem; color: #9a8a6e; }
+    .trust-banner {
+      background: #1f3b2c; color: white; text-align: center;
+      padding: 46px 24px; border-radius: 48px; margin: 30px 0 50px;
+    }
+    .order-row {
+      background: #fef0e0; padding: 28px; border-radius: 40px;
+      text-align: center; margin: 30px 0 40px;
+    }
+    .phone-highlight { font-size: 1.9rem; font-weight: 800; color: #1f3b2c; margin: 10px 0; }
+    .btn-group { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+    .btn-call, .btn-wa { text-decoration: none; padding: 12px 28px; border-radius: 40px; font-weight: 700; display: inline-flex; align-items: center; gap: 10px; }
+    .btn-call { background: #1f3b2c; color: white; }
+    .btn-wa { background: #25D366; color: white; }
+    /* team section */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin: 40px 0 30px;
+    }
+    .team-card {
+      background: white;
+      border-radius: 28px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+      border: 1px solid #efe3cf;
+    }
+    .team-name { font-size: 1.25rem; font-weight: 800; margin: 10px 0 4px; }
+    .team-role { font-size: 0.8rem; color: #c27f0e; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .team-phone { font-size: 1rem; font-weight: 600; }
+    .bold-phone { font-weight: 800; color: #1f3b2c; font-size: 1.1rem; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 30px 0 50px;
+    }
+    .gallery-item { border-radius: 24px; overflow: hidden; height: 180px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.2s; }
+    .about-wrap, .contact-wrap { background: white; border-radius: 32px; padding: 32px; margin: 30px 0; border: 1px solid #ece3d4; }
+    .flex-contact { display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; }
+    footer {
+      background: #1a2d22;
+      color: #d9cdb0;
+      padding: 48px 0 24px;
+      margin-top: 48px;
+    }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 36px; margin-bottom: 30px; }
+    .footer-col h4 { color: #f3d382; margin-bottom: 18px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 8px; }
+    .footer-col a { color: #e7dbbc; text-decoration: none; }
+    .copyright { text-align: center; border-top: 1px solid #3c5a48; padding-top: 24px; font-size: 0.85rem; }
+    @media (max-width: 780px) {
+      .hero h2 { font-size: 2rem; }
+      .product-price { font-size: 1.5rem; }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Khattak Building Materials Supplier</h1>
-    <p>Sand, Crush, Soil, Damper, Tractor Trolley</p>
-  </header>  <nav>
-    <a href="#">Home</a>
-    <a href="#">Products</a>
-    <a href="#">Services</a>
-    <a href="#">Contact</a>
-  </nav>  <section class="hero">
-    <h2>Construction Material Available</h2>
-    <p>ہم آپ کو تعمیراتی سامان مناسب ریٹ پر فراہم کرتے ہیں۔</p>
-  </section>  <section class="products">
-    <div class="card">
-      <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e" alt="Sand">
-      <h3>Sand</h3>
-      <p>ٹرالی ریت: 15000 روپے</p>
-      <p>ڈمپر ریت: 120 روپے فی فٹ</p>
-    </div><div class="card">
-  <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd" alt="Crush">
-  <h3>Crush</h3>
-  <p>ٹرالی کرش: 16000 روپے</p>
-  <p>ڈمپر کرش: 140 روپے فی فٹ</p>
+
+<!-- top bar with main numbers -->
+<div class="top-bar">
+  <span><i class="fas fa-phone-alt"></i> <a href="tel:+923135161261">0313 5161261</a></span>
+  <span><i class="fas fa-phone-alt"></i> <a href="tel:+923005528472">0300 5528472</a></span>
+  <span><i class="fab fa-whatsapp"></i> <a href="https://wa.me/923135161261" target="_blank">WhatsApp Us</a></span>
+  <span><i class="far fa-clock"></i> 7:00 AM – 7:00 PM</span>
+  <span><i class="fas fa-map-marker-alt"></i> Lane 4, Near Askari Bank, Main Range Road, Rawalpindi</span>
 </div>
 
-<div class="card">
-  <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5" alt="Bricks">
-  <h3>Bricks</h3>
-  <p>2500 روپے فی ہزار</p>
+<!-- Main Header -->
+<div class="main-header">
+  <div class="container header-flex">
+    <div class="logo">
+      <h1>SHAHID KHATTAK & BROTHERS</h1>
+      <p>Building Material Supplier | Rawalpindi - Islamabad</p>
+    </div>
+    <div class="nav-links">
+      <a href="#home">HOME</a>
+      <a href="#materials">MATERIALS</a>
+      <a href="#rates">RATES</a>
+      <a href="#team">TEAM</a>
+      <a href="#gallery">GALLERY</a>
+      <a href="#about">ABOUT US</a>
+      <a href="#contact">CONTACT</a>
+    </div>
+    <div class="header-phone">
+      <i class="fas fa-phone"></i> <a href="tel:+923135161261">0313 5161261</a>
+    </div>
+  </div>
 </div>
 
-<div class="card">
-  <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122" alt="Cement">
-  <h3>Cement</h3>
-  <p>1500 روپے فی بیگ</p>
+<!-- Hero -->
+<section id="home">
+  <div class="hero">
+    <div class="container">
+      <div class="hero-badge"><i class="fas fa-truck"></i> SUPPLIER</div>
+      <h2>YOUR TRUSTED <span style="color:#c27f0e;">BUILDING MATERIALS</span> SUPPLIER</h2>
+      <p>High-quality construction materials | On-time delivery | Best rates in Rawalpindi, Range Road, Saddar, Misrial Road, Chore Chowk, Westridge, Adyala Road, Chakra & Islamabad.</p>
+      <div class="features-grid">
+        <div class="feature-card"><i class="fas fa-truck-fast"></i> FAST DELIVERY</div>
+        <div class="feature-card"><i class="fas fa-gem"></i> BEST QUALITY</div>
+        <div class="feature-card"><i class="fas fa-rupee-sign"></i> REASONABLE RATES</div>
+        <div class="feature-card"><i class="fas fa-smile"></i> CUSTOMER SATISFACTION</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Info strip with updated address -->
+<div class="info-strip">
+  <div class="container info-cards">
+    <div class="info-item"><i class="fas fa-map-pin"></i><h4>Office Address</h4><p><strong>Lane 4, Near Askari Bank</strong><br>Main Range Road, Rawalpindi</p></div>
+    <div class="info-item"><i class="fas fa-truck"></i><h4>Delivery Areas</h4><p>Rawalpindi (Saddar, Misrial Road, Chore Chowk, Westridge, Adyala Road, Chakra) & entire Islamabad</p></div>
+    <div class="info-item"><i class="far fa-clock"></i><h4>Working Hours</h4><p>7:00 AM – 7:00 PM (Mon-Sat)</p></div>
+    <div class="info-item"><i class="fab fa-whatsapp"></i><h4>WhatsApp Order</h4><a href="https://wa.me/923135161261" class="wa-link">0313 5161261 <i class="fab fa-whatsapp"></i></a></div>
+  </div>
 </div>
 
-  </section>  <footer>
-    <p>Contact: 03005528472</p>
-  </footer>
+<!-- PRODUCTS + editable rates -->
+<section id="materials" style="scroll-margin-top: 100px;">
+  <div class="container">
+    <div class="section-title">OUR PRODUCTS <span id="editModeIndicator" style="font-size: 0.9rem;"></span></div>
+    <div class="section-sub">Building Materials & Current Rates (Double-click any price to edit in owner mode)</div>
+    <div class="products-grid" id="rates">
+      <!-- Trolley Sand -->
+      <div class="product-card" data-product="trolleySand">
+        <div class="product-img"><img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=500&h=300&fit=crop" alt="Sand"></div>
+        <div class="product-info">
+          <div class="product-title">Trolley Sand</div>
+          <div class="product-unit"><i class="fas fa-truck"></i> Per Trolley</div>
+          <div class="product-price"><span class="price-editable" data-price-id="sandTrolley">Rs. 15,000</span> <small>/ Trolley</small></div>
+          <div class="price-note">Fine quality river sand</div>
+        </div>
+      </div>
+      <!-- Trolley Crush -->
+      <div class="product-card">
+        <div class="product-img"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=500&h=300&fit=crop" alt="Crush"></div>
+        <div class="product-info">
+          <div class="product-title">Trolley Crush</div>
+          <div class="product-unit"><i class="fas fa-truck"></i> Per Trolley</div>
+          <div class="product-price"><span class="price-editable" data-price-id="crushTrolley">Rs. 16,000</span> <small>/ Trolley</small></div>
+        </div>
+      </div>
+      <!-- Damper Crush -->
+      <div class="product-card">
+        <div class="product-img"><img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=500&h=300&fit=crop" alt="Damper Crush"></div>
+        <div class="product-info">
+          <div class="product-title">Damper Crush</div>
+          <div class="product-unit"><i class="fas fa-ruler-combined"></i> Per Cubic Feet</div>
+          <div class="product-price"><span class="price-editable" data-price-id="damperCrush">Rs. 140</span> <small>/ Feet</small></div>
+        </div>
+      </div>
+      <!-- Damper Sand -->
+      <div class="product-card">
+        <div class="product-img"><img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=500&h=300&fit=crop" alt="Damper Sand"></div>
+        <div class="product-info">
+          <div class="product-title">Damper Sand</div>
+          <div class="product-unit"><i class="fas fa-ruler-combined"></i> Per Cubic Feet</div>
+          <div class="product-price"><span class="price-editable" data-price-id="damperSand">Rs. 120</span> <small>/ Feet</small></div>
+        </div>
+      </div>
+      <!-- Bricks -->
+      <div class="product-card">
+        <div class="product-img"><img src="https://images.unsplash.com/photo-1563906267088-b029e7101114?w=500&h=300&fit=crop" alt="Bricks"></div>
+        <div class="product-info">
+          <div class="product-title">Bricks</div>
+          <div class="product-unit"><i class="fas fa-cubes"></i> Per Thousand</div>
+          <div class="product-price"><span class="price-editable" data-price-id="bricks">Rs. 2,500</span> <small>/ 1000 pcs</small></div>
+        </div>
+      </div>
+      <!-- Cement -->
+      <div class="product-card">
+        <div class="product-img"><img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=500&h=300&fit=crop" alt="Cement"></div>
+        <div class="product-info">
+          <div class="product-title">Cement</div>
+          <div class="product-unit"><i class="fas fa-sack-dollar"></i> Per Bag</div>
+          <div class="product-price"><span class="price-editable" data-price-id="cement">Rs. 1,500</span> <small>/ Bag</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Owner Edit Toggle Button -->
+<button id="editModeBtn" class="edit-control"><i class="fas fa-pen-ruler"></i> Edit Rates (Owner)</button>
+
+<!-- Team Section with all contacts -->
+<section id="team" style="scroll-margin-top: 100px;">
+  <div class="container">
+    <div class="section-title">OUR TEAM & CONTACTS</div>
+    <div class="section-sub">Reach out directly for orders, support & bulk enquiries</div>
+    <div class="team-grid">
+      <div class="team-card">
+        <i class="fas fa-user-tie" style="font-size: 2rem; color:#b97f10;"></i>
+        <div class="team-name">Shahid Khattak</div>
+        <div class="team-role">Owner</div>
+        <div class="team-phone">📞 0300 5528472</div>
+        <div class="team-phone">📞 0313 5161261</div>
+      </div>
+      <div class="team-card">
+        <i class="fas fa-user-check" style="font-size: 2rem; color:#b97f10;"></i>
+        <div class="team-name bold-phone" style="font-weight: 800;">Rahid Ali</div>
+        <div class="team-role">Incharge</div>
+        <div class="team-phone bold-phone">📞 0301 5299525</div>
+      </div>
+      <div class="team-card">
+        <i class="fas fa-user" style="font-size: 2rem; color:#b97f10;"></i>
+        <div class="team-name">Wajid Ali</div>
+        <div class="team-role">Sales Coordinator</div>
+        <div class="team-phone">📞 0300 5141041</div>
+      </div>
+      <div class="team-card">
+        <i class="fas fa-user" style="font-size: 2rem; color:#b97f10;"></i>
+        <div class="team-name">Abid Ali</div>
+        <div class="team-role">Operations</div>
+        <div class="team-phone">📞 0318 4441367</div>
+      </div>
+      <div class="team-card">
+        <i class="fas fa-user" style="font-size: 2rem; color:#b97f10;"></i>
+        <div class="team-name">Abdul Wahid</div>
+        <div class="team-role">Supply Manager</div>
+        <div class="team-phone">📞 0345 4837237</div>
+      </div>
+      <div class="team-card">
+        <i class="fas fa-user" style="font-size: 2rem; color:#b97f10;"></i>
+        <div class="team-name">Umair</div>
+        <div class="team-role">Customer Support</div>
+        <div class="team-phone">📞 0345 5153500</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Trust Banner -->
+<div class="container">
+  <div class="trust-banner">
+    <h3>We Deliver Quality <span style="color:#f7c873;">❖ You Build Trust</span></h3>
+    <p><i class="fas fa-check-circle"></i> BEST CONSTRUCTION MATERIALS | ON-TIME DELIVERY</p>
+  </div>
+</div>
+
+<!-- Order Section -->
+<div class="container">
+  <div class="order-row">
+    <h4><i class="fas fa-clipboard-list"></i> For Orders & Enquiries</h4>
+    <div class="phone-highlight">📞 Shahid Khattak: 0313 5161261 | 0300 5528472</div>
+    <p>On-time delivery in Rawalpindi (Lane 4, Range Road, Saddar, Misrial Road, Chore Chowk, Westridge, Adyala Road, Chakra) & all Islamabad sectors. <strong>Call or WhatsApp</strong> for bulk discounts.</p>
+    <div class="btn-group">
+      <a href="tel:+923135161261" class="btn-call"><i class="fas fa-phone"></i> Call Shahid</a>
+      <a href="https://wa.me/923135161261" target="_blank" class="btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp Now</a>
+    </div>
+  </div>
+</div>
+
+<!-- Gallery -->
+<section id="gallery" style="scroll-margin-top: 100px;">
+  <div class="container">
+    <div class="section-title">MATERIALS GALLERY</div>
+    <div class="gallery-grid">
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=500&h=300&fit=crop" alt="Sand"></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=500&h=300&fit=crop" alt="Crush"></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1563906267088-b029e7101114?w=500&h=300&fit=crop" alt="Bricks"></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1516972810927-80185027ca84?w=500&h=300&fit=crop" alt="Cement"></div>
+    </div>
+  </div>
+</section>
+
+<!-- About & New Address -->
+<div class="container" id="about" style="scroll-margin-top: 100px;">
+  <div class="about-wrap">
+    <h3 style="font-size: 1.8rem;"><i class="fas fa-building"></i> Shahid Khattak & Brothers</h3>
+    <p style="margin: 16px 0; line-height: 1.5;"><strong>📍 Lane 4, Near Askari Bank, Main Range Road, Rawalpindi.</strong> We are the most trusted building material supplier in twin cities, offering premium quality sand, crush, bricks, cement, and damper materials. With a legacy of reliability and customer satisfaction, our family-led business ensures best rates and punctual delivery across Rawalpindi (including Saddar, Misrial Road, Chore Chowk, Westridge, Adyala Road, Chakra) and all sectors of Islamabad.</p>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap;"><span><i class="fas fa-truck"></i> Fleet of 20+ delivery vehicles</span><span><i class="fas fa-hand-holding-usd"></i> Competitive contractor rates</span><span><i class="fas fa-certificate"></i> Quality assured materials</span></div>
+  </div>
+</div>
+
+<!-- Contact Section -->
+<section id="contact" style="scroll-margin-top: 90px;">
+  <div class="container">
+    <div class="contact-wrap">
+      <h3><i class="fas fa-address-card"></i> Contact & Location</h3>
+      <div class="flex-contact">
+        <div class="contact-info">
+          <p><i class="fas fa-phone-alt"></i> <strong>Shahid Khattak:</strong> 0300 5528472 , 0313 5161261</p>
+          <p><i class="fas fa-user-tie"></i> <strong>Incharge Rahid Ali:</strong> 0301 5299525</p>
+          <p><i class="fab fa-whatsapp"></i> <strong>WhatsApp (Main):</strong> <a href="https://wa.me/923135161261">0313 5161261</a></p>
+          <p><i class="fas fa-map-pin"></i> <strong>Head Office:</strong> Lane 4, Near Askari Bank, Main Range Road, Rawalpindi, Pakistan.</p>
+        </div>
+        <div class="contact-info">
+          <p><i class="fas fa-truck-fast"></i> <strong>Service Hubs:</strong> Rawalpindi (Range Road, Saddar, Misrial Road, Chore Chowk, Westridge, Adyala Road, Chakra) + all Islamabad sectors.</p>
+          <p><i class="far fa-clock"></i> <strong>Hours:</strong> 7:00 AM – 7:00 PM (Friday open)</p>
+          <div style="background: #e7dcc8; border-radius: 24px; padding: 12px; margin-top: 16px;"><i class="fas fa-check-circle"></i> Direct contact numbers available for urgent orders</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col"><h4>SHAHID KHATTAK & BROTHERS</h4><p>Your family-owned building material supplier since 2008.</p></div>
+      <div class="footer-col"><h4>QUICK LINKS</h4><ul><li><a href="#home">Home</a></li><li><a href="#materials">Materials</a></li><li><a href="#team">Team</a></li><li><a href="#contact">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>MATERIALS</h4><ul><li>Sand & Crush</li><li>Bricks & Cement</li><li>Damper supply</li></ul></div>
+      <div class="footer-col"><h4>CONTACT</h4><ul><li><i class="fas fa-phone"></i> 0313 5161261</li><li><i class="fab fa-whatsapp"></i> WhatsApp: 0313 5161261</li><li>Lane 4, Near Askari Bank, Range Road, Rawalpindi</li></ul></div>
+    </div>
+    <div class="copyright">© 2025 Shahid Khattak & Brothers Building Material Supplier. All Rights Reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // Editable rates functionality with localStorage persistence
+  (function() {
+    const priceSpans = document.querySelectorAll('.price-editable');
+    const editBtn = document.getElementById('editModeBtn');
+    let editMode = localStorage.getItem('editModeActive') === 'true';
+    const indicator = document.getElementById('editModeIndicator');
+
+    // Load saved prices from localStorage
+    function loadSavedPrices() {
+      priceSpans.forEach(span => {
+        const id = span.getAttribute('data-price-id');
+        if (id) {
+          const saved = localStorage.getItem(`price_${id}`);
+          if (saved && saved.trim() !== "") {
+            span.innerText = saved;
+          }
+        }
+      });
+    }
+
+    // Save individual price
+    function savePrice(span, newValue) {
+      const id = span.getAttribute('data-price-id');
+      if (id) {
+        localStorage.setItem(`price_${id}`, newValue);
+      }
+    }
+
+    // Enable/disable edit mode
+    function setEditMode(enable) {
+      editMode = enable;
+      localStorage.setItem('editModeActive', enable);
+      priceSpans.forEach(span => {
+        if (enable) {
+          span.setAttribute('contenteditable', 'true');
+          span.style.cursor = 'text';
+          span.style.backgroundColor = '#fff2df';
+          span.style.outline = '1px dashed #c27f0e';
+        } else {
+          span.removeAttribute('contenteditable');
+          span.style.cursor = 'pointer';
+          span.style.backgroundColor = 'transparent';
+          span.style.outline = 'none';
+        }
+      });
+      if (enable) {
+        indicator.innerHTML = '<span class="edit-mode-badge"><i class="fas fa-edit"></i> Edit Mode ON</span>';
+        editBtn.innerHTML = '<i class="fas fa-save"></i> Exit & Save';
+      } else {
+        indicator.innerHTML = '';
+        editBtn.innerHTML = '<i class="fas fa-pen-ruler"></i> Edit Rates (Owner)';
+      }
+    }
+
+    // handle price editing and saving on blur
+    priceSpans.forEach(span => {
+      span.addEventListener('blur', function(e) {
+        if (!editMode) return;
+        let newValue = this.innerText.trim();
+        if (newValue === "") newValue = "Rs. 0";
+        // ensure it has Rs. prefix? not required but friendly
+        if (!newValue.startsWith('Rs.')) newValue = 'Rs. ' + newValue;
+        this.innerText = newValue;
+        savePrice(this, newValue);
+      });
+      // prevent enter from creating new line
+      span.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.blur();
+        }
+      });
+    });
+
+    editBtn.addEventListener('click', () => {
+      if (editMode) {
+        setEditMode(false);
+      } else {
+        setEditMode(true);
+      }
+    });
+
+    // initial load
+    loadSavedPrices();
+    setEditMode(editMode);  // restore mode state
+  })();
+</script>
 </body>
 </html>
